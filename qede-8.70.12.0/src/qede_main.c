@@ -4130,9 +4130,10 @@ static void qede_link_update(void *dev, struct qed_link_output *link)
 	} else {
 		if (netif_carrier_ok(edev->ndev)) {
 			DP_NOTICE(edev, "Link is down\n");
-			qede_rdma_dev_event_close(edev);
-			qede_close_os_tx(edev);
-			link_changed = true;
+			DP_NOTICE(edev, "Link down event ignored\n");
+			// qede_rdma_dev_event_close(edev);
+			// qede_close_os_tx(edev);
+			// link_changed = true;
 		}
 	}
 
