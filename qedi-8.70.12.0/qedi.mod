@@ -1,0 +1,2 @@
+/home/frankwwy/fastlinq-8.70.12.0/qedi-8.70.12.0/qedi_main.o /home/frankwwy/fastlinq-8.70.12.0/qedi-8.70.12.0/qedi_iscsi.o /home/frankwwy/fastlinq-8.70.12.0/qedi-8.70.12.0/qedi_fw.o /home/frankwwy/fastlinq-8.70.12.0/qedi-8.70.12.0/qedi_sysfs.o /home/frankwwy/fastlinq-8.70.12.0/qedi-8.70.12.0/qedi_dbg.o /home/frankwwy/fastlinq-8.70.12.0/qedi-8.70.12.0/qedi_dfs.o /home/frankwwy/fastlinq-8.70.12.0/qedi-8.70.12.0/qedi_debugfs.o /home/frankwwy/fastlinq-8.70.12.0/qedi-8.70.12.0/drv_scsi_fw_funcs.o /home/frankwwy/fastlinq-8.70.12.0/qedi-8.70.12.0/drv_e4_iscsi_fw_funcs.o
+

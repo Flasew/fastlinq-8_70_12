@@ -2000,7 +2000,12 @@ static void qedi_scsi_completion(struct qedi_ctx *qedi,
 		goto error;
 	}
 
-	if (!sc_cmd->request) {
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5,15,0)
+	if (!sc_cmd->request) 
+#else
+	if (!scsi_cmd_to_rq(sc_cmd)) 
+#endif
+	{
 		QEDI_WARN(&qedi->dbg_ctx,
 			  "sc_cmd->request is NULL, sc_cmd=%p.\n",
 			  sc_cmd);
@@ -2008,7 +2013,12 @@ static void qedi_scsi_completion(struct qedi_ctx *qedi,
 	}
 
 #if defined BLK_DEV_SPECIAL
-	if (!sc_cmd->request->special) {
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5,15,0)
+	if (!sc_cmd->request->special) 
+#else
+	if (!(scsi_cmd_to_rq(sc_cmd)->special)) 
+#endif
+	{
 		QEDI_WARN(&qedi->dbg_ctx,
 			  "request->special is NULL so request not valid, sc_cmd=%p.\n",
 			  sc_cmd);
@@ -2016,7 +2026,12 @@ static void qedi_scsi_completion(struct qedi_ctx *qedi,
 	}
 #endif
 
-	if (!sc_cmd->request->q) {
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5,15,0)
+	if (!sc_cmd->request->q) 
+#else 
+	if (!(scsi_cmd_to_rq(sc_cmd)->q)) 
+#endif
+	{
 		QEDI_WARN(&qedi->dbg_ctx,
 			  "request->q is NULL so request is not valid, sc_cmd=%p.\n",
 			  sc_cmd);

@@ -621,14 +621,22 @@ static void  qedf_init_task(struct qedf_rport *fcport, struct fc_lport *lport,
 
 	/* Choose which CQ to return I/O on */
 #if defined(NR_HW_QUEUES) && !defined(USE_BLK_MQ)
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5,15,0)
 	uniq_tag = blk_mq_unique_tag(sc_cmd->request);
+#else
+	uniq_tag = blk_mq_unique_tag(scsi_cmd_to_rq(sc_cmd));
+#endif
 	hwq = blk_mq_unique_tag_to_hwq(uniq_tag);
 	/* If blk-mq is enabled, use the hardware queue id */
 	cq_idx = hwq;
 
 #elif defined(NR_HW_QUEUES) && defined(USE_BLK_MQ)
 	if (shost_use_blk_mq(qedf->lport->host)) {
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5,15,0)
 		uniq_tag = blk_mq_unique_tag(sc_cmd->request);
+#else
+		uniq_tag = blk_mq_unique_tag(scsi_cmd_to_rq(sc_cmd));
+#endif
 		hwq = blk_mq_unique_tag_to_hwq(uniq_tag);
 		/* If blk-mq is enabled, use the hardware queue id */
 		cq_idx = hwq;
@@ -1297,22 +1305,35 @@ void qedf_scsi_completion(struct qedf_ctx *qedf, struct fcoe_cqe *cqe,
 		    sc_cmd);
 		return;
 	}
-
-	if (!sc_cmd->request) {
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5,15,0)
+	if (!sc_cmd->request) 
+#else
+	if (!scsi_cmd_to_rq(sc_cmd)) 
+#endif
+	{
 		QEDF_WARN(&(qedf->dbg_ctx), "sc_cmd->request is NULL, "
 		    "sc_cmd=%px.\n", sc_cmd);
 		return;
 	}
 
+
 #ifdef BLK_DEV_SPECIAL
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5,15,0)
 	if (!sc_cmd->request->special) {
+#else
+	if (!(scsi_cmd_to_rq(sc_cmd)->special)) {
+#endif
 		QEDF_WARN(&(qedf->dbg_ctx), "request->special is NULL so "
 		    "request not valid, sc_cmd=%px.\n", sc_cmd);
 		return;
 	}
 #endif
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5,15,0)
 	if (!sc_cmd->request->q) {
+#else
+	if (!(scsi_cmd_to_rq(sc_cmd)->q)) {
+#endif
 		QEDF_WARN(&(qedf->dbg_ctx), "request->q is NULL so request "
 		   "is not valid, sc_cmd=%px.\n", sc_cmd);
 		return;
