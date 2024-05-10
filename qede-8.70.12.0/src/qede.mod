@@ -1,0 +1,2 @@
+/home/frankwwy/fastlinq-8.70.12.0/qede-8.70.12.0/src/qede_main.o /home/frankwwy/fastlinq-8.70.12.0/qede-8.70.12.0/src/qede_fp.o /home/frankwwy/fastlinq-8.70.12.0/qede-8.70.12.0/src/qede_filter.o /home/frankwwy/fastlinq-8.70.12.0/qede-8.70.12.0/src/qede_ethtool.o /home/frankwwy/fastlinq-8.70.12.0/qede-8.70.12.0/src/qede_dcbnl.o /home/frankwwy/fastlinq-8.70.12.0/qede-8.70.12.0/src/qede_ptp.o /home/frankwwy/fastlinq-8.70.12.0/qede-8.70.12.0/src/qede_rdma.o
+
