@@ -143,6 +143,10 @@ MODULE_PARM_DESC(rdma_lag_support, " RDMA Bonding support enable - preview mode:
 bool numa_native = 1;
 module_param(numa_native, bool, 0444);
 MODULE_PARM_DESC(numa_native, "Enable NUMA Aware Memory Allocation & IRQ allocation (0=disabled, 1=enabled(default)");
+
+bool disable_linkdown = 0;
+module_param(disable_linkdown, bool, 0444);
+MODULE_PARM_DESC(disable_linkdown, "Disabling link down state reporting to the OS (0=link down enable(default), 1=link down disable");
 #endif
 
 static const struct qed_eth_ops *qed_ops;
@@ -4130,10 +4134,13 @@ static void qede_link_update(void *dev, struct qed_link_output *link)
 	} else {
 		if (netif_carrier_ok(edev->ndev)) {
 			DP_NOTICE(edev, "Link is down\n");
-			DP_NOTICE(edev, "Link down event ignored\n");
-			// qede_rdma_dev_event_close(edev);
-			// qede_close_os_tx(edev);
-			// link_changed = true;
+			if (disable_linkdown) {
+				DP_NOTICE(edev, "Link down event ignored\n");
+			} else {
+				qede_rdma_dev_event_close(edev);
+				qede_close_os_tx(edev);
+				link_changed = true;
+			}
 		}
 	}
 
